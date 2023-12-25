@@ -13,7 +13,7 @@ async function getAllProducts() {
 async function getProductById(productId) {
     const connection = await pool.getConnection();
     try {
-        const [rows] = await connection.query('SELECT * FROM produts WHERE id = ?', [productId]);
+        const [rows] = await connection.query('SELECT * FROM products WHERE id = ?', [productId]);
         return rows[0];
     } finally {
         connection.release();
