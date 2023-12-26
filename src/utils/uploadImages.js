@@ -5,7 +5,7 @@ async function uploadImage(localImagePath, fileName) {
     const fileContent = fs.readFileSync(localImagePath);
 
     const params = {
-        Bucket: dilboutique-images,
+        Bucket: process.env.BUCKET_NAME,
         Key: fileName,
         Body: fileContent,
         ContentType: 'image/jpeg'
