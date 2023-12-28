@@ -39,9 +39,39 @@ async function getAllUsers(req, res) {
     }
 }
 
+async function editUser(req, res) {
+    const userId = req.params.userId;
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+        return res.status(400).json({ error: "Username, email, and password are required" });
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+        const [existingUser] = await connection.query('SELECT * FROM users WHERE id = ?', [userId]);
+
+        if (existingUser.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        await connection.query('UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?', [username, email, password, userId]);
+
+        res.json({ message: "User updated successfully" });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: "Internal Server Error" });
+    } finally {
+        connection.release();
+    }
+}
+
+
 
 
 module.exports = {
     registerUser,
-    getAllUsers
+    getAllUsers,
+    editUser
 };
