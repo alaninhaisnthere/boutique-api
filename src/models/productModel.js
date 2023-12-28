@@ -20,7 +20,18 @@ async function getProductById(productId) {
     }
 }
 
+async function getProductsByCategory(category) {
+    const connection = await pool.getConnection();
+    try {
+        const [rows] = await connection.query('SELECT * FROM products WHERE category = ?', [category]);
+        return rows;
+    } finally {
+        connection.release();
+    }
+}
+
 module.exports = {
     getAllProducts,
-    getProductById
+    getProductById,
+    getProductsByCategory
 };

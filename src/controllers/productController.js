@@ -23,7 +23,26 @@ async function getProductById(req, res) {
     }
 }
 
+const productModel = require('../models/productModel');
+
+async function getProductsByCategory(req, res) {
+    try {
+        const category = req.params.category;
+        const products = await productModel.getProductsByCategory(category);
+
+        if (products.length === 0) {
+            return res.status(404).json({ error: 'No products found in the specified category' });
+        }
+
+        res.json(products);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 module.exports = {
     getAllProducts,
-    getProductById
+    getProductById,
+    getProductsByCategory
 };
