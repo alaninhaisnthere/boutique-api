@@ -2,13 +2,16 @@ const productModel = require("../models/productModel");
 
 async function getAllProducts(req, res) {
   try {
-    const products = await productModel.getAllProducts();
-    res.json(products);
+      console.log('Before calling getAllProducts');
+      const products = await productModel.getAllProducts();
+      console.log('After calling getAllProducts');
+      res.json(products);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
 
 async function getProductById(req, res) {
   try {
