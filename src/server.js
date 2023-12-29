@@ -5,13 +5,7 @@ const productRoutes = require("./routes/productRoutes");
 const homeRoutes = require("./routes/homeRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-app.use(
-  cors({
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "Content-Type",
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 
@@ -19,7 +13,7 @@ app.use("/api", productRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/home", homeRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
