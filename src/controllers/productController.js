@@ -2,8 +2,7 @@ const productModel = require('../models/productModel');
 
 async function getAllProducts(req, res) {
     try {
-        const products = await productModel.getAllProducts();
-        res.json(products);
+        res.json({ message: 'Products retrieved successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -12,11 +11,13 @@ async function getAllProducts(req, res) {
 
 async function getProductById(req, res) {
     try {
-        const product = await productModel.getProductById(req.params.productId);
-        if (!product) {
+        const productInfo = await productModel.getProductById(req.params.productId);
+
+        if (!productInfo) {
             return res.status(404).json({ error: 'Product not found' });
         }
-        res.json(product);
+
+        res.json(productInfo);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -26,13 +27,21 @@ async function getProductById(req, res) {
 async function getProductsByCategory(req, res) {
     try {
         const category = req.params.category;
-        const products = await productModel.getProductsByCategory(category);
+        res.json({ message: `Products in category ${category} retrieved successfully` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
-        if (products.length === 0) {
-            return res.status(404).json({ error: 'No products found in the specified category' });
-        }
+async function uploadProductImage(req, res) {
+    try {
+        const fileBuffer = req.file.buffer;
+        const fileName = req.file.originalname;
 
-        res.json(products);
+        const uploadResult = await productModel.uploadImageToS3(fileBuffer, fileName);
+
+        res.json({ imageUrl: uploadResult.Location });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -42,5 +51,6 @@ async function getProductsByCategory(req, res) {
 module.exports = {
     getAllProducts,
     getProductById,
-    getProductsByCategory
+    getProductsByCategory,
+    uploadProductImage,
 };

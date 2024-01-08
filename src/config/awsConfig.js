@@ -1,14 +1,12 @@
-const { format } = require('date-fns');
 const aws = require('aws-sdk');
 
-const AwsS3Client = new aws.S3({
-    region: process.env.AWS_REGION,
+const s3 = new aws.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-const uploadImageToS3 = async (dataBuffer, fileName) => {
-    const uploadResult = await AwsS3Client.upload({
+const uploadedFile = async (dataBuffer, fileName) => {
+    const uploadResult = await s3.upload({
         Bucket: process.env.AWS_EXPIRATION_BUCKET_NAME,
         Body: dataBuffer,
         Key: `${format(new Date(), 'yyyyMMddHHmmss')}-${fileName}`,
@@ -16,8 +14,6 @@ const uploadImageToS3 = async (dataBuffer, fileName) => {
     }).promise();
 
     return uploadResult;
-};
+}
 
-module.exports = {
-    uploadImageToS3,
-};
+module.exports = { uploadedFile };
