@@ -8,15 +8,19 @@ const s3 = new S3Client({
     },
 });
 
-const uploadedFile = async (dataBuffer, fileName) => {
-    const uploadResult = await s3.upload({
+const getSignedUrl = async (req, res) => {
+    const { categoria, imagem } = req.params;
+    const key = `${categoria}/${imagem}`;
+
+    const signedUrl = await s3.getSignedUrl('getObject', {
         Bucket: process.env.AWS_EXPIRATION_BUCKET_NAME,
-        Body: dataBuffer,
-        Key: `${format(new Date(), 'yyyyMMddHHmmss')}-${fileName}`,
-        ACL: 'public-read',
+        Key: key,
+        Expires: 60,
     });
 
-    return uploadResult;
+    res.json({ url: signedUrl });
 };
 
-module.exports = { uploadedFile };
+module.exports = {
+    getSignedUrl,
+};
