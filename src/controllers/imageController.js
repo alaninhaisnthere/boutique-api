@@ -1,12 +1,13 @@
 const { S3Client, ListObjectsV2Command, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { fromIni } = require('@aws-sdk/credential-provider-ini');
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const s3 = new S3Client({
+    region: process.env.AWS_REGION,
     credentials: fromIni(),
 });
 
 const getAllCategories = async (req, res) => {
-  //testar rota (depois implementar lógica do aws)
   try {
     const categories = ["feminina", "masculina", "calcados", "acessorios"];
     res.json({ categories });
@@ -35,7 +36,7 @@ const listAllImages = async () => {
   return objects.Contents.map((object) => object.Key);
 };
 
-const getSignedUrl = async (req, res) => {
+const getSignedUrlHandler = async (req, res) => {
   try {
     const { categoria, imagem } = req.params;
     const key = `${categoria.toLowerCase()}/${imagem}`;
@@ -45,7 +46,7 @@ const getSignedUrl = async (req, res) => {
       Key: key,
     });
 
-    const signedUrl = await s3.getSignedUrl(command);
+    const signedUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
     res.json({ url: signedUrl });
   } catch (error) {
     console.error("Error in getSignedUrl:", error);
@@ -56,5 +57,5 @@ const getSignedUrl = async (req, res) => {
 module.exports = {
   getAllCategories,
   getAllImages,
-  getSignedUrl,
+  getSignedUrlHandler,
 };
