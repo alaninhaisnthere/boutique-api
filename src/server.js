@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/images", imageRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/", homeRoutes);
 
 const PORT = process.env.PORT || 3001;

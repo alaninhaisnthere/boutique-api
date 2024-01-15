@@ -43,6 +43,7 @@ const getProductsByCategory = async (category) => {
         name: `Product ${product.Key.replace(/\D/g, '')}`,
         description: `Product Description ${product.Key.replace(/\D/g, '')}`,
         imageUrl: product.Location,
+        category: category.toLowerCase(),
     }));
 
     return productsInfo;
