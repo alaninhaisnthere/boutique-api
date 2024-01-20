@@ -7,7 +7,6 @@ const s3 = new S3Client({
     credentials: fromIni(),
 });
 
-
 const getAllCategories = async (req, res) => {
   try {
     const params = {
@@ -62,8 +61,29 @@ const getSignedUrlHandler = async (req, res) => {
   }
 };
 
+const getCategoryItems = async (req, res) => {
+  try {
+    const { categoria } = req.params;
+    const prefix = `${categoria.toLowerCase()}/`;
+
+    const params = {
+      Bucket: process.env.AWS_EXPIRATION_BUCKET_NAME,
+      Prefix: prefix
+    };
+
+    const response = await s3.send(new ListObjectsV2Command(params));
+    const items = response.Contents.map(object => object.Key.replace(prefix, ''));
+
+    res.json({ categoria, items });
+  } catch (error) {
+    console.error("Error in getCategoryItems:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   getAllCategories,
   getAllImages,
   getSignedUrlHandler,
+  getCategoryItems,
 };

@@ -5,5 +5,6 @@ const imageController = require('../controllers/imageController');
 router.get('/images', imageController.getAllImages);
 router.get('/categories', imageController.getAllCategories);
 router.get('/:categoria/:imagem', imageController.getSignedUrlHandler);
+router.get('/:categoria', imageController.getCategoryItems);
 
 module.exports = router;
