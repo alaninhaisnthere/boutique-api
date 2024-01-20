@@ -7,9 +7,17 @@ const s3 = new S3Client({
     credentials: fromIni(),
 });
 
+
 const getAllCategories = async (req, res) => {
   try {
-    const categories = ["feminina", "masculina", "calcados", "acessorios"];
+    const params = {
+      Bucket: process.env.AWS_EXPIRATION_BUCKET_NAME,
+      Delimiter: '/'
+    };
+
+    const response = await s3.send(new ListObjectsV2Command(params));
+    const categories = response.CommonPrefixes.map(prefix => prefix.Prefix.replace('/', ''));
+    
     res.json({ categories });
   } catch (error) {
     console.error("Error in getAllCategories:", error);
