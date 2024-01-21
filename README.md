@@ -89,9 +89,15 @@ A Boutique API é uma API desenvolvida para gerenciar e fornecer acesso a imagen
 
 ---
 
+## :books: Documentação
+
+- [Documentação da API](api_documentation.md)
+
+---
+
 **Contribuições:**
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests para melhorar a API.
+Contribuições são sempre bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests com dicas e sugestões para melhorar a API.
 
 ---
 
