@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const imageRoutes = require("./routes/imageRoutes");
-const homeRoutes = require("./routes/homeRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 app.use(cors());
@@ -10,7 +9,6 @@ app.use(express.json());
 
 app.use("/api/images", imageRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/", homeRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
